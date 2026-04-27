@@ -7,10 +7,8 @@ import jakarta.persistence.Embeddable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
