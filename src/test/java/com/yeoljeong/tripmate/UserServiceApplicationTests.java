@@ -1,4 +1,4 @@
-package com.yeoljeong.userservice;
+package com.yeoljeong.tripmate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
