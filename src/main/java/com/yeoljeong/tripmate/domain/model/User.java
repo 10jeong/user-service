@@ -1,11 +1,10 @@
-package com.yeoljeong.tripmate.domain.entity;
+package com.yeoljeong.tripmate.domain.model;
 
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;
 import com.yeoljeong.tripmate.domain.enums.Gender;
 import com.yeoljeong.tripmate.domain.enums.UserRole;
 import com.yeoljeong.tripmate.domain.enums.UserStatus;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,6 +15,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,8 +30,7 @@ public class User extends BaseAuditEntity {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Embedded
-    private Email email;
+    private String email;
 
     @Column(nullable = false)
     private String name;
@@ -52,6 +51,28 @@ public class User extends BaseAuditEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserStatus roleStatus;
+    private UserStatus roleStatus = UserStatus.ACTIVE;
 
+    @Builder(access = AccessLevel.PRIVATE)
+    private User(String email, String name, String password, String gender, LocalDate birthDate,
+        String role) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.gender = Gender.valueOf(gender);
+        this.birthDate = birthDate;
+        this.role = UserRole.valueOf(role);
+    }
+
+    public static User create(String email, String name, String password, String gender,
+        LocalDate birthDate, String role) {
+        return User.builder()
+            .email(email)
+            .name(name)
+            .password(password)
+            .gender(gender)
+            .birthDate(birthDate)
+            .role(role)
+            .build();
+    }
 }

@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.domain.entity;
+package com.yeoljeong.tripmate.domain.model;
 
 import com.yeoljeong.tripmate.domain.exception.UserErrorCode;
 import com.yeoljeong.tripmate.exception.ApiException;
