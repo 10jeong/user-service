@@ -1,0 +1,10 @@
+package com.yeoljeong.tripmate.infrastructure.persistence.jpa;
+
+import com.yeoljeong.tripmate.domain.model.User;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserJpaRepository extends JpaRepository<User, UUID> {
+    Optional<User> findByEmail(String email);
+}
