@@ -55,7 +55,14 @@ public class AuthServiceImpl implements AuthService {
         // 기존의 토큰을 무효화 합니다.
         refreshTokenPort.deleteRefreshToken(userId);
 
-        User user = userQueryService.findByUserId(UUID.fromString(userId))
+        UUID userUuid;
+        try {
+            userUuid = UUID.fromString(userId);
+        } catch (IllegalArgumentException e) {
+            throw new BusinessException(UserErrorCode.INVALID_TOKEN);
+        }
+
+        User user = userQueryService.findByUserId(userUuid)
             .orElseThrow(() -> new BusinessException(UserErrorCode.NOT_FOUND_USER));
 
         return issueTokens(user);
