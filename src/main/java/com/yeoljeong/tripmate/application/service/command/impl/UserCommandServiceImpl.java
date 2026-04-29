@@ -9,6 +9,7 @@ import com.yeoljeong.tripmate.domain.model.User;
 import com.yeoljeong.tripmate.domain.repository.UserRepository;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +32,13 @@ public class UserCommandServiceImpl implements UserCommandService {
             command.gender(),
             command.birthDate(), command.role());
 
-        User savedUser = userRepository.save(user);
-        return UserCreateResult.from(savedUser);
+        // 동시에 들어오는 요청이 있을 경우 마지막에 들어오는 요청이 5xx에러가 발생하는 문제가 발생 -> DataIntegrityViolationException를 통해 409로 응답
+        try {
+            User savedUser = userRepository.save(user);
+            return UserCreateResult.from(savedUser);
+        } catch (DataIntegrityViolationException e) {
+            throw new BusinessException(UserErrorCode.ALREADY_EXIST_EMAIL);
+        }
     }
 
     // helper method
