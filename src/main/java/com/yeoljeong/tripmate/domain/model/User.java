@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.domain.model;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;
 import com.yeoljeong.tripmate.domain.enums.Gender;
 import com.yeoljeong.tripmate.domain.enums.UserRole;
@@ -75,5 +76,11 @@ public class User extends BaseAuditEntity {
             .birthDate(birthDate)
             .role(role)
             .build();
+    }
+
+    public boolean matchPassword(String rawPassword) {
+        return BCrypt.verifyer()
+            .verify(rawPassword.toCharArray(), this.password)
+            .verified;
     }
 }

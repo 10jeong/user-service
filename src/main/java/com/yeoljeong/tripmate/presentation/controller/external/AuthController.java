@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.presentation.controller.external;
 import com.yeoljeong.tripmate.application.dto.result.LoginResult;
 import com.yeoljeong.tripmate.application.service.auth.AuthService;
 import com.yeoljeong.tripmate.presentation.dto.request.LoginRequest;
+import com.yeoljeong.tripmate.presentation.dto.request.RefreshTokenRequest;
 import com.yeoljeong.tripmate.response.ApiResponse;
 import com.yeoljeong.tripmate.response.constants.CommonSuccessCode;
 import jakarta.validation.Valid;
@@ -23,6 +24,13 @@ public class AuthController {
     public ApiResponse<LoginResult> login(
         @Valid @RequestBody LoginRequest request) {
         LoginResult result = authService.login(request.toCommand());
+        return ApiResponse.success(CommonSuccessCode.OK, result);
+    }
+
+    @PostMapping("/refresh")
+    public ApiResponse<LoginResult> refresh(
+        @Valid @RequestBody RefreshTokenRequest request) {
+        LoginResult result = authService.refreshToken(request.toCommand());
         return ApiResponse.success(CommonSuccessCode.OK, result);
     }
 }

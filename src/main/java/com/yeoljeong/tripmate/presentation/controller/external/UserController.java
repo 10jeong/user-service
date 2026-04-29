@@ -20,7 +20,7 @@ public class UserController {
 
     private final UserCommandService userCommandService;
 
-    @PostMapping
+    @PostMapping("/signup")
     public ApiResponse<UserInfoResponse> createMember(
         @Valid @RequestBody UserCreateRequest request) {
         UserCreateResult result = userCommandService.registerUser(request.toCommand());

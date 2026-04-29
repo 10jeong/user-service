@@ -4,6 +4,7 @@ import com.yeoljeong.tripmate.domain.model.User;
 import com.yeoljeong.tripmate.domain.repository.UserRepository;
 import com.yeoljeong.tripmate.infrastructure.persistence.jpa.UserJpaRepository;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +22,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
         return userJpaRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findById(UUID userId) {
+        return userJpaRepository.findById(userId);
     }
 }

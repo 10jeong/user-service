@@ -1,6 +1,7 @@
 package com.yeoljeong.tripmate.infrastructure.jwt;
 
 import com.yeoljeong.tripmate.application.port.JwtPort;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -60,5 +61,36 @@ public class JwtTokenProvider implements JwtPort {
     @Override
     public long getAccessTokenExpiration() {
         return jwtProperties.accessTokenExpiration();
+    }
+
+    /* 서명을 검증합니다. TODO Gateway에 위치한 코드와 중복되어 공통화 작업이 필요 */
+    @Override
+    public boolean validateToken(String token) {
+        try {
+            Claims claims = getClaims(token);
+
+            String subject = claims.getSubject();
+
+            return subject != null && !subject.isBlank();
+        } catch (Exception e) {
+            log.warn("[JwtProvider] 토큰 검증 실패: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    /* subject를 추출합니다.*/
+    @Override
+    public String getUserId(String token) {
+        Claims claims = getClaims(token);
+        return claims.getSubject();
+    }
+
+    // helper method
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+            .verifyWith(signingKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
     }
 }
