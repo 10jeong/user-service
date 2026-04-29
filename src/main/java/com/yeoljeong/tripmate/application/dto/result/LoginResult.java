@@ -5,8 +5,8 @@ public record LoginResult(String accessToken,
                           String tokenType,
                           long expiresIn) {
 
-    public static LoginResult from(LoginResult result) {
-        return new LoginResult(result.accessToken(), result.refreshToken(), result.tokenType(),
-            result.expiresIn());
+    public static LoginResult from(String accessToken, String refreshToken, String tokenType,
+        long expiresIn) {
+        return new LoginResult(accessToken, refreshToken, tokenType, expiresIn);
     }
 }
