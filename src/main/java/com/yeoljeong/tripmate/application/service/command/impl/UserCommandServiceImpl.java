@@ -7,7 +7,7 @@ import com.yeoljeong.tripmate.application.service.command.UserCommandService;
 import com.yeoljeong.tripmate.domain.exception.UserErrorCode;
 import com.yeoljeong.tripmate.domain.model.User;
 import com.yeoljeong.tripmate.domain.repository.UserRepository;
-import com.yeoljeong.tripmate.exception.ApiException;
+import com.yeoljeong.tripmate.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +38,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     // helper method
     private void validateCheckByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new ApiException(UserErrorCode.ALREADY_EXIST_EMAIL);
+            throw new BusinessException(UserErrorCode.ALREADY_EXIST_EMAIL);
         }
     }
 }
