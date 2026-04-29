@@ -30,7 +30,7 @@ public class User extends BaseAuditEntity {
     @Column(updatable = false, nullable = false)
     private UUID id;
 
-    @Column(nullable = false, unique = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)

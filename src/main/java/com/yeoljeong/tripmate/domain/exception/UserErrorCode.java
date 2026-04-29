@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum UserErrorCode implements ErrorCode {
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "올바르지 않은 이메일 형식입니다."),
     ALREADY_EXIST_EMAIL(HttpStatus.CONFLICT, "이미 가입되어 있는 이메일입니다."),
-    ;
+    NOT_FOUND_USER(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 올바르지 않습니다.");
 
     private final HttpStatus status;
     private final String message;
