@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.domain.model;
 
 import com.yeoljeong.tripmate.domain.exception.UserErrorCode;
-import com.yeoljeong.tripmate.exception.ApiException;
+import com.yeoljeong.tripmate.exception.BusinessException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.regex.Matcher;
@@ -23,7 +23,7 @@ public class Email {
 
     public static Email of(String value) {
         if (!isValid(value)) {
-            throw new ApiException(UserErrorCode.INVALID_EMAIL_FORMAT);
+            throw new BusinessException(UserErrorCode.INVALID_EMAIL_FORMAT);
         }
         Email email = new Email();
         email.email = value;
