@@ -45,15 +45,12 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String userId = jwtPort.getUserId(refreshToken);
-        String savedToken = refreshTokenPort.getRefreshToken(userId);
+        String savedToken = refreshTokenPort.getAndDeleteRefreshToken(userId);
 
         // 불일치 시 탈취 의심에서 예외시키기 위해 요청토큰과 Redis에서 추출된 토큰을 검증합니다.
         if (savedToken == null || !savedToken.equals(refreshToken)) {
             throw new BusinessException(UserErrorCode.INVALID_TOKEN);
         }
-
-        // 기존의 토큰을 무효화 합니다.
-        refreshTokenPort.deleteRefreshToken(userId);
 
         UUID userUuid;
         try {
