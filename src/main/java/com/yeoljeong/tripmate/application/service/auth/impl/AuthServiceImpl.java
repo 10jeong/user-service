@@ -4,6 +4,7 @@ import com.yeoljeong.tripmate.application.dto.command.RefreshTokenCommand;
 import com.yeoljeong.tripmate.application.dto.result.LoginCommand;
 import com.yeoljeong.tripmate.application.dto.result.LoginResult;
 import com.yeoljeong.tripmate.application.port.JwtPort;
+import com.yeoljeong.tripmate.application.port.PasswordEncoderPort;
 import com.yeoljeong.tripmate.application.port.RefreshTokenPort;
 import com.yeoljeong.tripmate.application.service.auth.AuthService;
 import com.yeoljeong.tripmate.application.service.query.UserQueryService;
@@ -23,13 +24,14 @@ public class AuthServiceImpl implements AuthService {
     private final UserQueryService userQueryService;
     private final JwtPort jwtPort;
     private final RefreshTokenPort refreshTokenPort;
+    private final PasswordEncoderPort passwordEncoderPort;
 
     @Override
     public LoginResult login(LoginCommand command) {
         User user = userQueryService.findByEmail(command.email())
             .orElseThrow(() -> new BusinessException(UserErrorCode.NOT_FOUND_USER));
 
-        if (!user.matchPassword(command.password())) {
+        if (!passwordEncoderPort.matches(command.password(), user.getPassword())) {
             throw new BusinessException(UserErrorCode.NOT_FOUND_USER);
         }
 
