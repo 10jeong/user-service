@@ -1,8 +1,8 @@
 package com.yeoljeong.tripmate.application.service.command.impl;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.yeoljeong.tripmate.application.dto.command.UserCreateCommand;
 import com.yeoljeong.tripmate.application.dto.result.UserCreateResult;
+import com.yeoljeong.tripmate.application.port.PasswordEncoderPort;
 import com.yeoljeong.tripmate.application.port.UserEventPublisher;
 import com.yeoljeong.tripmate.application.service.command.UserCommandService;
 import com.yeoljeong.tripmate.domain.exception.UserErrorCode;
@@ -21,15 +21,14 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     private final UserRepository userRepository;
     private final UserEventPublisher userEventPublisher;
+    private final PasswordEncoderPort passwordEncoderPort;
 
     @Override
     @Transactional
     public UserCreateResult registerUser(UserCreateCommand command) {
 
         validateCheckByEmail(command.email());
-
-        String encodedPassword = BCrypt.withDefaults()
-            .hashToString(12, command.password().toCharArray());
+        String encodedPassword = passwordEncoderPort.encode(command.password());
 
         User user = User.create(command.email(), command.name(), encodedPassword,
             command.gender(),
