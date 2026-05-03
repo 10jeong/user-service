@@ -15,7 +15,6 @@ public class RefreshTokenPortImpl implements RefreshTokenPort {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    // TODO: 조회→비교→삭제가 원자적이지 않아 동시 재발급 가능성 있음
     @Override
     public void saveRefreshToken(String userId, String refreshToken, long timeout, TimeUnit unit) {
         redisTemplate.opsForValue()
@@ -32,5 +31,11 @@ public class RefreshTokenPortImpl implements RefreshTokenPort {
     @Override
     public String getRefreshToken(String userId) {
         return redisTemplate.opsForValue().get(REFRESH_TOKEN_PREFIX + userId);
+    }
+
+    @Override
+    public String getAndDeleteRefreshToken(String userId) {
+        return redisTemplate.opsForValue()
+            .getAndDelete(REFRESH_TOKEN_PREFIX + userId);
     }
 }
