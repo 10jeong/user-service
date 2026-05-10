@@ -28,9 +28,11 @@ eureka:
     fetch-registry: true
 
   instance:
-#    hostname: pelvis-pounce-attempt.ngrok-free.dev
+    hostname: pelvis-pounce-attempt.ngrok-free.dev
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
-#    secure-port: 443
+    secure-port: 443
 #    secure-port-enabled: true
 #    non-secure-port-enabled: false
-    prefer-ip-address: false
+#    prefer-ip-address: false
+    non-secure-port-enabled: true
+    prefer-ip-address: true
