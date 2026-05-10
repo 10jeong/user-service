@@ -25,6 +25,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseAuditEntity {
 
+    private static final String DELETED_EMAIL_PREFIX = "deleted_";
+    private static final String DELETED_EMAIL_SUFFIX = "@deleted.com";
+    private static final String DELETED_NAME = "WITHDRAW USER";
+    private static final LocalDate DELETED_BIRTH_DATE = LocalDate.of(9999, 12, 31);
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false)
@@ -75,5 +80,15 @@ public class User extends BaseAuditEntity {
             .birthDate(birthDate)
             .role(role)
             .build();
+    }
+
+    public void withdraw(String anonymizedPassword) {
+        this.email = DELETED_EMAIL_PREFIX + this.id + DELETED_EMAIL_SUFFIX;
+        this.name = DELETED_NAME;
+        this.password = anonymizedPassword;
+        this.gender = Gender.WITHDRAWN;
+        this.birthDate = DELETED_BIRTH_DATE;
+        this.roleStatus = UserStatus.DELETED;
+        softDelete();
     }
 }

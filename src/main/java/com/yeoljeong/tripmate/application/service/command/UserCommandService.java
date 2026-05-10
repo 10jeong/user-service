@@ -7,4 +7,5 @@ import com.yeoljeong.tripmate.application.dto.result.UserCreateResult;
 public interface UserCommandService {
 
     UserCreateResult registerUser(UserCreateCommand command);
+
 }

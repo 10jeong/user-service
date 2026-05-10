@@ -2,7 +2,6 @@ package com.yeoljeong.tripmate.infrastructure.security;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.yeoljeong.tripmate.application.port.PasswordEncoderPort;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

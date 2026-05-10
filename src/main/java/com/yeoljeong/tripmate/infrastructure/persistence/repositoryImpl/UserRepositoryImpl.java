@@ -21,11 +21,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return userJpaRepository.findByEmail(email);
+        return userJpaRepository.findByEmailAndIsDeletedFalse(email);
     }
 
     @Override
     public Optional<User> findById(UUID userId) {
-        return userJpaRepository.findById(userId);
+        return userJpaRepository.findByIdAndIsDeletedFalse(userId);
     }
 }
