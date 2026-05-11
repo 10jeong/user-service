@@ -1,0 +1,38 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  properties:
+    hibernate:
+      format_sql: true
+      default_schema: user
+
+server:
+  port: 8088
+
+eureka:
+# 테스트 환경에서의 편의를 위해 유레카 서버를 중지
+#  client:
+#    register-with-eureka: false
+#    fetch-registry: false
+  client:
+    service-url:
+#      defaultZone: ${EUREKA_SERVER_URL:https://dolphin-device-evident.ngrok-free.dev/eureka}
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    hostname: pelvis-pounce-attempt.ngrok-free.dev
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+    secure-port: 443
+#    secure-port-enabled: true
+#    non-secure-port-enabled: false
+#    prefer-ip-address: false
+    non-secure-port-enabled: true
+    prefer-ip-address: true
