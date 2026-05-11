@@ -4,10 +4,10 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    data:
-      redis:
-        host: ${REDIS_HOST}
-        port: ${REDIS_PORT}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
   jpa:
     hibernate:
       ddl-auto: update
@@ -23,35 +23,34 @@ spring:
           batch_size: 30
           order_inserts: true
           order_updates: true
+  sql:
+    init:
+      mode: never
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAPS}
     consumer:
       group-id: user-group
-      auto-offset-reset: earliest
+      auto-offset-reset: latest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: "com.yeoljeong.tripmate.*"
-        spring.json.type.headers: true
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties:
-        spring.json.type.headers: true
-
+        acks: all
+        retries: 3
+        max.in.flight.requests.per.connection: 1
     listener:
       ack-mode: manual
       missing-topics-fatal: false
-
-  properties:
-    hibernate:
-      format_sql: true
-      default_schema: user
+  retry:
+    interval: 1000
+    max-attempts: 3
 
 server:
-  port: 8088
+  port: ${SERVER_PORT:8080}
 
 eureka:
   client:
@@ -62,3 +61,6 @@ eureka:
     hostname: ${EUREKA_INSTANCE_HOST_NAME}
     non-secure-port: 80
     prefer-ip-address: false
+
+jwt:
+  secret: ${JWT_INTERNAL_SECRET}
