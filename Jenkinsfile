@@ -59,7 +59,7 @@ pipeline {
                             --name user-service \\
                             --env-file /home/ec2-user/.env \\
                             -e SPRING_PROFILES_ACTIVE=prod \\
-                            -p 80:8080 \\
+                            -p 8080:8080 \\
                             ${DOCKER_IMAGE}:${DOCKER_TAG}
                     '
                 """
