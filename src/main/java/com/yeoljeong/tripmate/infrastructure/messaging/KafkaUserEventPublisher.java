@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class KafkaUserEventPublisher implements UserEventPublisher {
 
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
     @Override
     public void publish(UserCreatedEvent event) {
         try {
             String message = objectMapper.writeValueAsString(event);
-            kafkaTemplate.send(UserTopic.USER_CREATED_TOPIC, event);
+            kafkaTemplate.send(UserTopic.USER_CREATED_TOPIC, message);
             log.info("UserCreatedEvent published: {}", message);
         } catch (JsonProcessingException e) {
             log.error("UserCreatedEvent 직렬화 실패: {}", e.getMessage());
