@@ -47,3 +47,31 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy') {
+            steps {
+                sh """
+                    ssh -i ${PEM_PATH} -o StrictHostKeyChecking=no ec2-user@${USER_EC2_IP} '
+                        docker pull ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        docker stop user-service || true
+                        docker rm user-service || true
+                        docker run -d \\
+                            --name user-service \\
+                            --env-file /home/ec2-user/.env \\
+                            -p 8080:8080 \\
+                            ${DOCKER_IMAGE}:${DOCKER_TAG}
+                    '
+                """
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deploy succeeded'
+        }
+        failure {
+            echo 'Deploy failed'
+        }
+    }
+}
