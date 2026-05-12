@@ -2,47 +2,38 @@ package com.yeoljeong.tripmate.application.service.command.impl;
 
 import com.yeoljeong.tripmate.application.port.MatchingWithdrawalCheckPort;
 import com.yeoljeong.tripmate.application.port.OrderWithdrawalCheckPort;
-import com.yeoljeong.tripmate.application.port.PasswordEncoderPort;
 import com.yeoljeong.tripmate.application.port.PlanWithdrawalCheckPort;
 import com.yeoljeong.tripmate.application.port.SellerWithdrawalCheckPort;
-import com.yeoljeong.tripmate.application.port.UserEventPublisher;
 import com.yeoljeong.tripmate.application.port.dto.result.WithdrawalCheckResult;
 import com.yeoljeong.tripmate.application.service.command.WithdrawalService;
 import com.yeoljeong.tripmate.domain.enums.UserRole;
 import com.yeoljeong.tripmate.domain.exception.UserErrorCode;
-import com.yeoljeong.tripmate.domain.model.User;
-import com.yeoljeong.tripmate.domain.repository.UserRepository;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class WithdrawalServiceImpl implements WithdrawalService {
 
-    private final UserRepository userRepository;
-    private final UserEventPublisher userEventPublisher;
-    private final PasswordEncoderPort passwordEncoderPort;
     private final PlanWithdrawalCheckPort planWithdrawalCheckPort;
     private final OrderWithdrawalCheckPort orderWithdrawalCheckPort;
     private final MatchingWithdrawalCheckPort matchingWithdrawalCheckPort;
     private final SellerWithdrawalCheckPort sellerWithdrawalCheckPort;
+    private final WithdrawalProcessor withdrawalProcessor;
+
 
     @Override
-    @Transactional
-    public void withdraw(UUID userId) {
-        User user = getUser(userId);
-
+    public void withdraw(UUID userId, String role) {
         List<WithdrawalCheckResult> results = new ArrayList<>();
         results.add(planWithdrawalCheckPort.check(userId));
         results.add(orderWithdrawalCheckPort.check(userId));
         results.add(matchingWithdrawalCheckPort.check(userId));
 
-        if (user.getRole() == UserRole.SELLER) {
+        if (UserRole.SELLER == UserRole.valueOf(role)) {
             results.add(sellerWithdrawalCheckPort.check(userId));
         }
 
@@ -54,15 +45,7 @@ public class WithdrawalServiceImpl implements WithdrawalService {
             throw new BusinessException(UserErrorCode.HAS_ACTIVE_DATA);
         }
 
-        String anonymizedPassword = passwordEncoderPort.encode((UUID.randomUUID().toString()));
-        user.withdraw(anonymizedPassword);
-
-        // TODO: userEventPublisher.publish(new UserWithdrawalEvent(userId, role));
+        withdrawalProcessor.process(userId);
     }
 
-    // helper method
-    private User getUser(UUID userId) {
-        return userRepository.findById(userId)
-            .orElseThrow(() -> new BusinessException(UserErrorCode.NOT_FOUND_USER));
-    }
 }

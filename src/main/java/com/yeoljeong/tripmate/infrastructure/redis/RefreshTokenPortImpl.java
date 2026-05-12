@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class RefreshTokenPortImpl implements RefreshTokenPort {
+
     private static final String REFRESH_TOKEN_PREFIX = "RT:";
+    private static final String BLACKLIST_PREFIX = "BL:";
 
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -29,13 +31,16 @@ public class RefreshTokenPortImpl implements RefreshTokenPort {
     }
 
     @Override
-    public String getRefreshToken(String userId) {
-        return redisTemplate.opsForValue().get(REFRESH_TOKEN_PREFIX + userId);
-    }
-
-    @Override
     public String getAndDeleteRefreshToken(String userId) {
         return redisTemplate.opsForValue()
             .getAndDelete(REFRESH_TOKEN_PREFIX + userId);
     }
+
+    @Override
+    public void addToBlacklist(String userId, long expiration, TimeUnit unit) {
+        redisTemplate.opsForValue()
+            .set(BLACKLIST_PREFIX + userId, "blacklisted", expiration,
+                unit);
+    }
+
 }
