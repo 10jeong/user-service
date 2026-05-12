@@ -29,6 +29,7 @@ public class JwtTokenProvider implements JwtPort {
 
     public String generateAccessToken(UUID userId, String role) {
         Date now = new Date();
+        String jti = UUID.randomUUID().toString();
         Date expirationDate = new Date(now.getTime() + jwtProperties.accessTokenExpiration());
 
         return Jwts.builder()
@@ -37,6 +38,7 @@ public class JwtTokenProvider implements JwtPort {
             .claim("role", role)
             .issuedAt(now)
             .expiration(expirationDate)
+            .id(jti)
             .signWith(signingKey)
             .compact();
     }

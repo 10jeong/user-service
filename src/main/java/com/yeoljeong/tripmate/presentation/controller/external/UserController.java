@@ -45,7 +45,7 @@ public class UserController {
 
     @DeleteMapping("/me")
     public ApiResponse<Void> withdrawUser(@LoginUser UserContext userContext) {
-        withdrawalService.withdraw(userContext.userId());
+        withdrawalService.withdraw(userContext.userId(), userContext.role());
         return ApiResponse.success(CommonSuccessCode.OK, null);
     }
 }
