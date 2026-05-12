@@ -87,12 +87,6 @@ public class JwtTokenProvider implements JwtPort {
         return claims.getSubject();
     }
 
-    @Override
-    public String getJti(String token) {
-        Claims claims = getClaims(token);
-        return claims.getId();
-    }
-
     // helper method
     private Claims getClaims(String token) {
         return Jwts.parser()
