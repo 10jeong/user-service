@@ -4,5 +4,5 @@ import java.util.UUID;
 
 public interface WithdrawalService {
 
-    void withdraw(UUID userId);
+    void withdraw(UUID userId, String role);
 }
