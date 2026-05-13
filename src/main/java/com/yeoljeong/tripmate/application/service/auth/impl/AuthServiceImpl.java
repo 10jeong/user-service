@@ -79,6 +79,9 @@ public class AuthServiceImpl implements AuthService {
             jwtPort.getRefreshExpiration(),
             TimeUnit.MILLISECONDS);
 
+        // 로그인 시 블랙리스트에 있으면 제거합니다.
+        refreshTokenPort.removeFromBlackList(String.valueOf(userUUID));
+
         return new LoginResult(newAccessToken, newRefreshToken, "Bearer",
             jwtPort.getAccessTokenExpiration());
     }
