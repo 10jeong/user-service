@@ -3,7 +3,7 @@ package com.yeoljeong.tripmate.application.service.command.impl;
 import com.yeoljeong.tripmate.application.dto.command.UserCreateCommand;
 import com.yeoljeong.tripmate.application.dto.result.UserCreateResult;
 import com.yeoljeong.tripmate.application.port.PasswordEncoderPort;
-import com.yeoljeong.tripmate.application.port.UserEventPublisher;
+import com.yeoljeong.tripmate.application.port.UserOutboxPort;
 import com.yeoljeong.tripmate.application.service.command.UserCommandService;
 import com.yeoljeong.tripmate.domain.exception.UserErrorCode;
 import com.yeoljeong.tripmate.domain.model.User;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCommandServiceImpl implements UserCommandService {
 
     private final UserRepository userRepository;
-    private final UserEventPublisher userEventPublisher;
+    private final UserOutboxPort userOutboxPort;
     private final PasswordEncoderPort passwordEncoderPort;
 
     @Override
@@ -37,7 +37,7 @@ public class UserCommandServiceImpl implements UserCommandService {
         // 동시에 들어오는 요청이 있을 경우 마지막에 들어오는 요청이 5xx에러가 발생하는 문제가 발생 -> DataIntegrityViolationException를 통해 409로 응답
         try {
             User savedUser = userRepository.save(user);
-            userEventPublisher.publish(
+            userOutboxPort.publish(
                 new UserCreatedEvent(savedUser.getId(), savedUser.getGender().name()));
             return UserCreateResult.from(savedUser);
         } catch (DataIntegrityViolationException e) {
