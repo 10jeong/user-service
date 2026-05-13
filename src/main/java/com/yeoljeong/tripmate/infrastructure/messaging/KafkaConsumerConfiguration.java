@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.infrastructure;
+package com.yeoljeong.tripmate.infrastructure.messaging;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.TopicPartition;
