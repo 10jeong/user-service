@@ -12,4 +12,5 @@ public interface RefreshTokenPort {
 
     void addToBlacklist(String userId, long expiration, TimeUnit unit);
 
+    void removeFromBlackList(String userId);
 }

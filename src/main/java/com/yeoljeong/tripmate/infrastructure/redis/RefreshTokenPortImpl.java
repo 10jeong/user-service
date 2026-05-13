@@ -43,4 +43,9 @@ public class RefreshTokenPortImpl implements RefreshTokenPort {
                 unit);
     }
 
+    @Override
+    public void removeFromBlackList(String userId) {
+        redisTemplate.delete(BLACKLIST_PREFIX + userId);
+    }
+
 }
