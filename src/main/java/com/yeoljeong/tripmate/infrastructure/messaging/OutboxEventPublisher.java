@@ -2,7 +2,7 @@ package com.yeoljeong.tripmate.infrastructure.messaging;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yeoljeong.tripmate.application.port.UserEventPublisher;
+import com.yeoljeong.tripmate.application.port.UserOutboxPort;
 import com.yeoljeong.tripmate.event.UserCreatedEvent;
 import com.yeoljeong.tripmate.event.UserWithdrawalEvent;
 import com.yeoljeong.tripmate.event.enums.UserTopic;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class OutboxUserEventPublisher implements UserEventPublisher {
+public class OutboxEventPublisher implements UserOutboxPort {
 
     private final ObjectMapper objectMapper;
     private final UserOutboxRepository userOutboxRepository;
