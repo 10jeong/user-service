@@ -1,6 +1,5 @@
 package com.yeoljeong.tripmate.application.service.command.impl;
 
-import com.yeoljeong.tripmate.application.port.MatchingWithdrawalCheckPort;
 import com.yeoljeong.tripmate.application.port.OrderWithdrawalCheckPort;
 import com.yeoljeong.tripmate.application.port.PlanWithdrawalCheckPort;
 import com.yeoljeong.tripmate.application.port.SellerWithdrawalCheckPort;
@@ -21,7 +20,6 @@ public class WithdrawalServiceImpl implements WithdrawalService {
 
     private final PlanWithdrawalCheckPort planWithdrawalCheckPort;
     private final OrderWithdrawalCheckPort orderWithdrawalCheckPort;
-    private final MatchingWithdrawalCheckPort matchingWithdrawalCheckPort;
     private final SellerWithdrawalCheckPort sellerWithdrawalCheckPort;
     private final WithdrawalProcessor withdrawalProcessor;
 
@@ -31,7 +29,7 @@ public class WithdrawalServiceImpl implements WithdrawalService {
         List<WithdrawalCheckResult> results = new ArrayList<>();
         results.add(planWithdrawalCheckPort.check(userId));
         results.add(orderWithdrawalCheckPort.check(userId));
-        results.add(matchingWithdrawalCheckPort.check(userId));
+        //TODO results.add(matchingWithdrawalCheckPort.check(userId));
 
         if (UserRole.SELLER == UserRole.valueOf(role)) {
             results.add(sellerWithdrawalCheckPort.check(userId));
