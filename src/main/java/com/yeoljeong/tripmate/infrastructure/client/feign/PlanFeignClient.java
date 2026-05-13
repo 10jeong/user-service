@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "plan-service")
 public interface PlanFeignClient {
 
-    @GetMapping("/internal/plans/withdrawal-check")
+    @GetMapping("/internal/plan/withdrawal-check")
     WithdrawalCheckResponse check(@RequestParam("userId") UUID userId);
 }
