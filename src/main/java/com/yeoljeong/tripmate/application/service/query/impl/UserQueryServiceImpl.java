@@ -1,11 +1,14 @@
 package com.yeoljeong.tripmate.application.service.query.impl;
 
+import com.yeoljeong.tripmate.application.dto.command.UserSummaryCommand;
 import com.yeoljeong.tripmate.application.dto.result.UserDetailsResult;
+import com.yeoljeong.tripmate.application.dto.result.UserSummaryResult;
 import com.yeoljeong.tripmate.application.service.query.UserQueryService;
 import com.yeoljeong.tripmate.domain.exception.UserErrorCode;
 import com.yeoljeong.tripmate.domain.model.User;
 import com.yeoljeong.tripmate.domain.repository.UserRepository;
 import com.yeoljeong.tripmate.exception.BusinessException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +38,11 @@ public class UserQueryServiceImpl implements UserQueryService {
             .orElseThrow(() -> new BusinessException(UserErrorCode.NOT_FOUND_USER));
 
         return UserDetailsResult.from(user);
+    }
+
+    @Override
+    public List<UserSummaryResult> getUsersByIds(UserSummaryCommand command) {
+        List<User> users = userRepository.findAllByIdIn(command.userIds());
+        return UserSummaryResult.from(users);
     }
 }
