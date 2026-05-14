@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.infrastructure.persistence.repositoryImpl;
 import com.yeoljeong.tripmate.domain.model.User;
 import com.yeoljeong.tripmate.domain.repository.UserRepository;
 import com.yeoljeong.tripmate.infrastructure.persistence.jpa.UserJpaRepository;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findById(UUID userId) {
         return userJpaRepository.findByIdAndIsDeletedFalse(userId);
+    }
+
+    @Override
+    public List<User> findAllByIdIn(List<UUID> uuids) {
+        return userJpaRepository.findAllByIdIn(uuids);
     }
 }
