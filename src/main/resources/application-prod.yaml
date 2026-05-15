@@ -6,14 +6,14 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: 6379
     hikari:
       maximum-pool-size: 5
       minimum-idle: 2
       connection-timeout: 3000
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
 
   jpa:
     hibernate:
