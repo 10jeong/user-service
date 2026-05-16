@@ -19,7 +19,7 @@ public class BcryptPasswordEncoder implements PasswordEncoderPort {
 
     @Override
     public String encode(String rawPassword) {
-        return BCrypt.with(Version.VERSION_2B)
-            .hashToString(10, rawPassword.toCharArray());
+        return BCrypt.withDefaults()
+            .hashToString(12, rawPassword.toCharArray());
     }
 }
