@@ -10,4 +10,5 @@ public interface UserOutboxRepository extends JpaRepository<UserOutbox, UUID> {
 
     List<UserOutbox> findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus status);
 
+    UUID id(UUID id);
 }
