@@ -30,14 +30,14 @@ public class UserOutboxDispatcher {
                 log.error("[OUTBOX_DISPATCHER] 발행 실패 - topic: {}, id: {}",
                     outbox.getTopic(), outbox.getId(), e);
                 tryMarkFailed(outbox.getId());
-                continue;  // 현재 요소만 건너뜀
+                continue;
             }
 
             try {
                 userOutboxUpdater.markPublished(outbox.getId());
             } catch (Exception e) {
                 log.error("[OUTBOX_DISPATCHER] 상태 업데이트 실패 - id: {}", outbox.getId(), e);
-                break;  // 배치 전체 중단
+                break;
             }
         }
     }
