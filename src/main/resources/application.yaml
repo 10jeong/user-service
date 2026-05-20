@@ -36,7 +36,5 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   internal-secret: ${JWT_INTERNAL_SECRET}
-#  access-token-expiration: 5000 # 30분
-#  access-token-expiration: 1800000 # 30분
-  access-token-expiration: 2628000000 # 테스트
+  access-token-expiration: 1800000 # 30분
   refresh-token-expiration: 86400000 # 1일
